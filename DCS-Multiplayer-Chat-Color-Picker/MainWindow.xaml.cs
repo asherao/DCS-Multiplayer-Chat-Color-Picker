@@ -13,22 +13,15 @@ using Microsoft.Win32;
 //http://hex2rgba.devoth.com/
 
 /*
-Welcome to DCS Multiplayer Chat Color Picker! 
+Welcome to BAKA (Best Alternative Kolor App)! (Formerly named DCS Multiplayer Chat Color Picker.) 
 This application will allow you to pick your favorite colors for the DCS chat in Multiplayer.
 You will also be able to reset the colors.
-You may also be able to choose "designer" colors.
+You can also choose "designer" colors.
 Desinger Color Schemes:
-All I See Is Red
-USAUSAUSA
 Colorblind
-Monica Helms
 Rainbow
-You may also be able to save presets.
-
-Notes:
--Use a JSON reference library for this one
-    -Location of the users picked file
-    -Presets for custom Schemes
+Monica Helms
+You can also save presets.
 
 Storyboard:
 -User opens downloads the app
@@ -40,10 +33,9 @@ Storyboard:
 -User selects their fave colors
 -User clicks Save Colors
     -the colors are written to the backup file
-    -the colors are modded into the MP chat file (make sure to do it in such a way that is future proofed
+    -the colors are modded into the MP chat file
     -There is some sort of visual confirmation
-    -if User enters a preset name, that color set will be added to the preset list
-        -after saving, the preset list name will dissappear for visual confirmation
+    -after saving, the preset list name will reset for visual confirmation
 -User selects a preset from the dropdown and then pressed load Preset
     -the program will load those colors into the color boxes but will not save
 
@@ -97,10 +89,12 @@ namespace DCS_Multiplayer_Chat_Color_Picker
     {
         string appPath = System.AppDomain.CurrentDomain.BaseDirectory;//gets the path of were the utility is running
         string settingsPath;
+        string appName = "BestAlternativeKolorApp";
         public MainWindow()
         {
             InitializeComponent();
-            settingsPath = appPath + @"/DCS-Multilayer-Chat-Color-Picker-Settings/Settings.txt";//where the settigns will be saved
+            //settingsPath = appPath + @"/DCS-Multilayer-Chat-Color-Picker-Settings/Settings.txt";//where the settings will be saved
+            settingsPath = appPath + appName + @"/Settings.txt";//where the settigns will be saved
             LoadDefaultColors();//load the default colors at first so blank string errors can be avoided
             DisableAllButtons();
             CheckForSaveFile();
@@ -113,7 +107,7 @@ namespace DCS_Multiplayer_Chat_Color_Picker
             {
                 var savedSettings = LsonVars.Parse(File.ReadAllText(settingsPath));//put the contents of the settings file into a lua read
 
-                selected_selectDcsExe_string = savedSettings["DcsMultiplayerChatColorPicker"]["userFileLocation"].GetString();
+                selected_selectDcsExe_string = savedSettings[appName]["userFileLocation"].GetString();
 
                 if (selected_selectDcsExe_string.Length > 2)//i just chose two just because
                 {
@@ -132,12 +126,13 @@ namespace DCS_Multiplayer_Chat_Color_Picker
             {
                 Console.WriteLine("DEBUG: Did not find the Setting file");
 
-                Directory.CreateDirectory(appPath + @"/DCS-Multilayer-Chat-Color-Picker-Settings");//creates the save folder
+                Directory.CreateDirectory(appPath + appName);//creates the save folder
                                                                                                    //https://docs.microsoft.com/en-us/dotnet/api/system.io.streamwriter?redirectedfrom=MSDN&view=netcore-3.1
                                                                                                    
                 //write the following in the text file
                 string[] defaultExportString = {
-                "DcsMultiplayerChatColorPicker = ",
+                appName + " = ",
+                //"DcsMultiplayerChatColorPicker = ",
                 "{",
                 "   [\"userFileLocation\"] = \"\",",
                 "   [\"Presets\"] = ",
@@ -247,7 +242,7 @@ namespace DCS_Multiplayer_Chat_Color_Picker
 
                     string tempString = selected_selectDcsExe_string.Replace('\\', '|');//this prevents a lua read error 
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["userFileLocation"] = tempString;//save the user location
+                    savedSettings[appName]["userFileLocation"] = tempString;//save the user location
                     File.WriteAllText(settingsPath, LsonVars.ToString(savedSettings)); // serialize back to a file
                 }
                 else
@@ -484,61 +479,61 @@ namespace DCS_Multiplayer_Chat_Color_Picker
 
             string tempString = selected_selectDcsExe_string.Replace('\\', '|');//this prevents a lua read error 
 
-            savedSettings["DcsMultiplayerChatColorPicker"]["userFileLocation"] = tempString;//save the user location
+            savedSettings[appName]["userFileLocation"] = tempString;//save the user location
             //case for which preset was enabled and which to overrite, if any
 
             switch (dropDownButton_loadPreset.SelectedItem.ToString())
             {
                 case "Option 1"://if Option 1 was in the box when the save button was pressed
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_1"] 
+                    savedSettings[appName]["Presets"]["presetName_1"]["color_1"] 
                         = (colorPicker_blueCoalition.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_2"] 
+                    savedSettings[appName]["Presets"]["presetName_1"]["color_2"] 
                         = (colorPicker_redCoalition.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_3"] 
+                    savedSettings[appName]["Presets"]["presetName_1"]["color_3"] 
                         = (colorPicker_spectators.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_4"] 
+                    savedSettings[appName]["Presets"]["presetName_1"]["color_4"] 
                         = (colorPicker_selfSay.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_5"] 
+                    savedSettings[appName]["Presets"]["presetName_1"]["color_5"] 
                         = (colorPicker_serverMessages.SelectedColor.ToString());
 
                     break;
 
                 case "Option 2":
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_1"]
+                    savedSettings[appName]["Presets"]["presetName_2"]["color_1"]
                         = (colorPicker_blueCoalition.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_2"]
+                    savedSettings[appName]["Presets"]["presetName_2"]["color_2"]
                         = (colorPicker_redCoalition.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_3"]
+                    savedSettings[appName]["Presets"]["presetName_2"]["color_3"]
                         = (colorPicker_spectators.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_4"]
+                    savedSettings[appName]["Presets"]["presetName_2"]["color_4"]
                         = (colorPicker_selfSay.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_5"]
+                    savedSettings[appName]["Presets"]["presetName_2"]["color_5"]
                         = (colorPicker_serverMessages.SelectedColor.ToString());
 
                     break;
 
                 case "Option 3":
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_1"]
+                    savedSettings[appName]["Presets"]["presetName_3"]["color_1"]
                         = (colorPicker_blueCoalition.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_2"]
+                    savedSettings[appName]["Presets"]["presetName_3"]["color_2"]
                         = (colorPicker_redCoalition.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_3"]
+                    savedSettings[appName]["Presets"]["presetName_3"]["color_3"]
                         = (colorPicker_spectators.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_4"]
+                    savedSettings[appName]["Presets"]["presetName_3"]["color_4"]
                         = (colorPicker_selfSay.SelectedColor.ToString());
 
-                    savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_5"]
+                    savedSettings[appName]["Presets"]["presetName_3"]["color_5"]
                         = (colorPicker_serverMessages.SelectedColor.ToString());
                     break;
 
@@ -606,16 +601,16 @@ namespace DCS_Multiplayer_Chat_Color_Picker
             //colorPicker_blueCoalition.SelectedColor =
             //     (Color)ColorConverter.ConvertFromString("#FF0808DB");
             colorPicker_blueCoalition.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_1"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_3"]["color_1"].GetString());
             colorPicker_redCoalition.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_2"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_3"]["color_2"].GetString());
             colorPicker_spectators.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_3"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_3"]["color_3"].GetString());
             colorPicker_selfSay.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_4"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_3"]["color_4"].GetString());
             colorPicker_serverMessages.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_3"]["color_5"].GetString());
-            //Console.WriteLine(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_1"].ToString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_3"]["color_5"].GetString());
+            //Console.WriteLine(savedSettings[appName]["Presets"]["presetName_1"]["color_1"].ToString());
 
         }
 
@@ -627,16 +622,16 @@ namespace DCS_Multiplayer_Chat_Color_Picker
             //colorPicker_blueCoalition.SelectedColor =
             //     (Color)ColorConverter.ConvertFromString("#FF0808DB");
             colorPicker_blueCoalition.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_1"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_2"]["color_1"].GetString());
             colorPicker_redCoalition.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_2"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_2"]["color_2"].GetString());
             colorPicker_spectators.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_3"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_2"]["color_3"].GetString());
             colorPicker_selfSay.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_4"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_2"]["color_4"].GetString());
             colorPicker_serverMessages.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_2"]["color_5"].GetString());
-            //Console.WriteLine(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_1"].ToString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_2"]["color_5"].GetString());
+            //Console.WriteLine(savedSettings[appName]["Presets"]["presetName_1"]["color_1"].ToString());
 
         }
 
@@ -649,18 +644,33 @@ namespace DCS_Multiplayer_Chat_Color_Picker
             //colorPicker_blueCoalition.SelectedColor =
             //     (Color)ColorConverter.ConvertFromString("#FF0808DB");
             colorPicker_blueCoalition.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_1"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_1"]["color_1"].GetString());
             colorPicker_redCoalition.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_2"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_1"]["color_2"].GetString());
             colorPicker_spectators.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_3"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_1"]["color_3"].GetString());
             colorPicker_selfSay.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_4"].GetString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_1"]["color_4"].GetString());
             colorPicker_serverMessages.SelectedColor =
-                 (Color)ColorConverter.ConvertFromString(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_5"].GetString());
-            //Console.WriteLine(savedSettings["DcsMultiplayerChatColorPicker"]["Presets"]["presetName_1"]["color_1"].ToString());
+                 (Color)ColorConverter.ConvertFromString(savedSettings[appName]["Presets"]["presetName_1"]["color_5"].GetString());
+            //Console.WriteLine(savedSettings[appName]["Presets"]["presetName_1"]["color_1"].ToString());
 
 
+        }
+
+        private void titleBar_leftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            //this moves the window when the titlebar is clicked and held down
+            //I made the custom title bar
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
+        }
+
+
+
+        private void button_close_click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

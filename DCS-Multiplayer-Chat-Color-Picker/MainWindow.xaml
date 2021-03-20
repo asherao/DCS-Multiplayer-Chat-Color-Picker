@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:DCS_Multiplayer_Chat_Color_Picker"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="DCS_Multiplayer_Chat_Color_Picker.MainWindow"
         mc:Ignorable="d"
-        Title="DCS Multiplayer Chat Color Picker by Bailey v1" Height="279" Width="325" WindowStyle="ToolWindow" Background="Black">
-
+        Title="Best Alternative Kolor App (BAKA) by Bailey v1" Height="279" Width="325" WindowStyle="None" ResizeMode="NoResize" BorderThickness="1" BorderBrush="Gray" AllowsTransparency="false" Background="Black" MinHeight="150" MinWidth="200">
+    <!--https://stackoverflow.com/questions/36631165/how-to-remove-white-strip-on-top-of-wpf-window-with-windowstyle-none-->
     <!--https://stackoverflow.com/questions/31355380/c-sharp-wpf-xaml-globally-set-all-text-in-a-view-to-one-color-and-all-backgrou-->
     <Window.Resources>
         <Style TargetType="{x:Type TextBox}">
@@ -38,6 +38,8 @@
 
     </Window.Resources>
 
+
+
     <Grid>
         <Grid.ColumnDefinitions>
             <!--Margin-->
@@ -53,7 +55,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <!--Margin-->
-            <RowDefinition Height="0"/>
+            <RowDefinition Height="AUTO"/>
             <!--Margin-->
 
             <RowDefinition Height="*"/>
@@ -68,6 +70,63 @@
             <RowDefinition Height="0"/>
             <!--Margin-->
         </Grid.RowDefinitions>
+
+
+
+        <!--<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center" >
+
+                <Button x:Name="MinimizeButton"
+                KeyboardNavigation.IsTabStop="False"
+                Click="MinimizeWindow"
+                Style="{StaticResource MinimizeButton}" 
+                Template="{StaticResource MinimizeButtonControlTemplate}" />
+
+                <Button x:Name="MaximizeButton"
+                KeyboardNavigation.IsTabStop="False"
+                Click="MaximizeClick"
+                Style="{DynamicResource MaximizeButton}" 
+                Template="{DynamicResource MaximizeButtonControlTemplate}" />
+
+                <Button x:Name="CloseButton"
+                KeyboardNavigation.IsTabStop="False"
+                Command="{Binding ApplicationCommands.Close}"
+                Style="{DynamicResource CloseButton}" 
+                Template="{DynamicResource CloseButtonControlTemplate}"/>
+
+            </StackPanel>-->
+
+        <!--<StackPanel Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="317">-->
+            <!--<Button x:Name="MinimizeButton"
+                KeyboardNavigation.IsTabStop="False"
+                Click="MinimizeWindow"
+                Style="{StaticResource MinimizeButton}" 
+                Template="{StaticResource MinimizeButtonControlTemplate}" />
+
+            <Button x:Name="MaximizeButton"
+                KeyboardNavigation.IsTabStop="False"
+                Click="MaximizeClick"
+                Style="{DynamicResource MaximizeButton}" 
+                Template="{DynamicResource MaximizeButtonControlTemplate}" />-->
+
+        <!--// Title Bar //-->
+
+        <TextBlock Grid.Row="0" Grid.Column="0"  Text="Best Alternative Kolor App (BAKA) v1 by Bailey" Margin="5,0,5,0"
+                   VerticalAlignment="Top" Width="Auto" Background="Black" Foreground="White" FontSize="12" 
+                   FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="4" PreviewMouseLeftButtonDown="titleBar_leftButtonDown">
+        </TextBlock>
+
+        <!--https://stackoverflow.com/questions/1068979/wpf-rectangle-does-not-have-a-click-event-->
+        <Button x:Name="button_close" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" Margin="5,0" Click="button_close_click">
+            <Button.Template>
+                <ControlTemplate>
+                    <Rectangle Fill="Red" Width="10" Height="10">
+                    </Rectangle>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <!--</StackPanel>-->
 
         <Button x:Name="button_selectDcsExe" Content="Select DCS.exe" Click="Button_selectDcsExe_Click" 
                 Grid.Column="1" Grid.Row="1" Margin="5" MouseRightButtonUp="Button_selectDcsExe_rightUp" FontWeight="Bold" TabIndex="1">
@@ -223,6 +282,7 @@
             </ComboBox>
 
         </Viewbox>
+        
 
     </Grid>
 </Window>
